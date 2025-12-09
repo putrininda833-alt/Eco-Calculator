@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco-Calculator | Hitung Jejak Karbon </title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css"> </head>
+<body>
+
+<div id="particles-js"></div>
+
+<div class="container-fluid d-flex flex-column justify-content-center align-items-center min-vh-100 position-relative z-index-1 p-3">
+    <div class="text-center mb-5 fade-in-up">
+        <h1 class="fw-bold text-success display-4">Eco-Calculator 🌱</h1>
+        <p class="text-muted lead">Hitung emisi CO2 harianmu dan temukan solusi hijau.
+            Karya Hebat Taruna SMATAJAYA
+        </p>
+        
+    </div>
+
+    <div class="row g-4 justify-content-center w-100 fade-in-up delay-1">
+        <div class="col-md-5">
+            <div class="card p-4">
+                <h5 class="mb-4 fw-bold">Data Penggunaan</h5>
+                <div class="mb-3">
+                    <label class="form-label">Listrik (kWh / Bulan)</label>
+                    <input type="number" id="inputListrik" class="form-control" placeholder="Contoh: 150">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Bensin (Liter / Bulan)</label>
+                    <input type="number" id="inputBensin" class="form-control" placeholder="Contoh: 30">
+                </div>
+                <button onclick="hitungKarbon()" class="btn btn-green w-100 fw-bold">Hitung Jejak Karbon</button>
+            </div>
+        </div>
+
+        <div class="col-md-5">
+            <div class="card p-4 text-center">
+                <h5 class="fw-bold">Hasil Perhitungan</h5>
+                <h2 id="totalOutput" class="text-success mt-3">0 <small class="fs-6">kg CO2/bln</small></h2>
+                
+                <div id="chartContainer">
+                    <canvas id="myChart"></canvas>
+                </div>
+
+                <div id="solusiArea" class="mt-3 p-3 bg-light rounded d-none">
+                    <p class="small text-muted mb-0"><strong>Tips Hijau:</strong></p>
+                    <p id="tipsTeks" class="small"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script> <script src="script.js"></script> <script>
+    particlesJS('particles-js', {
+        "particles": {
+            "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
+            "color": { "value": "#ffffff" },
+            "shape": { "type": "circle" },
+            "opacity": { "value": 0.5, "random": false },
+            "size": { "value": 3, "random": true },
+            "line_linked": { "enable": true, "distance": 150, "color": "#ffffff", "opacity": 0.4, "width": 1 },
+            "move": { "enable": true, "speed": 6, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false },
+        },
+        "interactivity": {
+            "detect_on": "canvas",
+            "events": { "onhover": { "enable": true, "mode": "grab" }, "onclick": { "enable": true, "mode": "push" }, "resize": true },
+            "modes": { "grab": { "distance": 140, "line_linked": { "opacity": 1 } }, "bubble": { "distance": 400, "size": 40, "duration": 2, "opacity": 8, "speed": 3 }, "repulse": { "distance": 200, "duration": 0.4 }, "push": { "particles_nb": 4 }, "remove": { "particles_nb": 2 } }
+        },
+        "retina_detect": true
+    });
+</script>
+
+<div class="tab-content" id="pills-tabContent">
+    <div class="tab-pane fade show active" id="pills-calc" role="tabpanel">
+        </div>
+
+    <div class="tab-pane fade" id="education" role="tabpanel">
+        <div class="row justify-content-center">
+            <div class="col-md-10 col-lg-8">
+                <div class="card p-4 shadow-sm border-0">
+                    <h2 class="fw-bold text-success mb-4">Mengenal Jejak Karbon</h2>
+                    
+                    <section class="mb-5">
+                        <h4 class="fw-bold"><i class="bi bi-info-circle"></i> Apa Itu Jejak Karbon?</h4>
+                        <p class="text-muted">Jejak karbon adalah total emisi gas rumah kaca (terutama karbon dioksida) yang dihasilkan oleh aktivitas manusia. Setiap kali kita menyalakan lampu atau berkendara, kita meninggalkan "jejak" di atmosfer.</p>
+                        
+                    </section>
+
+                    <section class="mb-5">
+                        <h4 class="fw-bold"><i class="bi bi-diagram-3"></i> Komponen Utama</h4>
+                        <div class="row g-3">
+                            <div class="col-sm-6">
+                                <div class="p-3 border rounded bg-light">
+                                    <h6 class="fw-bold text-success">Emisi Langsung (Primer)</h6>
+                                    <p class="small mb-0">Emisi dari pembakaran bahan bakar fosil yang kita kendalikan sendiri (bensin kendaraan, LPG memasak).</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="p-3 border rounded bg-light">
+                                    <h6 class="fw-bold text-success">Emisi Tidak Langsung</h6>
+                                    <p class="small mb-0">Emisi dari penggunaan listrik yang dihasilkan oleh pembangkit listrik batu bara (PLN).</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <h4 class="fw-bold"><i class="bi bi-activity"></i> Aktivitas Penghasil Karbon</h4>
+                        <div class="table-responsive mt-3">
+                            <table class="table align-middle">
+                                <thead class="table-success">
+                                    <tr>
+                                        <th>Aktivitas</th>
+                                        <th>Penyebab Utama</th>
+                                        <th>Skala Emisi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Transportasi</strong></td>
+                                        <td>Pembakaran BBM (Bensin/Diesel)</td>
+                                        <td><span class="badge bg-danger">Tinggi</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Listrik Rumah</strong></td>
+                                        <td>Pembangkit listrik tenaga uap</td>
+                                        <td><span class="badge bg-warning text-dark">Sedang</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Konsumsi Makanan</strong></td>
+                                        <td>Proses industri & limbah pangan</td>
+                                        <td><span class="badge bg-info text-dark">Rendah</span></td>
+                                    </tr>
+                                 </tbody>
+                            </table>
+                        </div>
+                    </section>
+                                
+                    <section>
+                        <h4 class="fw-bold"><i class="bi bi-activity"></i> Kategori Ambang Batas Jejak Karbon</h4>
+                        <div class="table-responsive mt-3">
+                            <table class="table align-middle">
+                                <thead class="table-success">
+                                        <td><strong>Rendah/ Aman</strong></td>
+                                        <td><span class="badge bg-info text-dark">< 150 kg CO2 per bulan</span></td>
+                                          <tr>
+                                        <td><strong>Sedang</strong></td>
+                                        <td><span class="badge bg-warning text-dark">150 – 500 kg CO2 per bulan</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Tinggi</strong></td>
+                                        <td><span class="badge bg-danger">> 500 kg CO2 per bulan</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="script.js"></script>
+</body>
+<div id="particles-js"></div>
+
+<div class="container py-5 position-relative z-index-1">
+    <div class="text-center mb-5 fade-in-up">
+        <h1 class="fw-bold text-success display-4">KOKURIKULER SMAN 5 TARUNA BRAWIJAYA </h1>
+        <p class="text-white lead">Made By Berlyana-Dziffani-Girindra-Narayana-Syakira</p>
+         <p class="text-white lead">Disclaimer [Dibantu AI] </p>
+    </div>
+
+    <ul class="nav nav-pills justify-content-center mb-5" id="pills-tab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active btn-tab" id="pills-calc-tab" data-bs-toggle="pill" data-bs-target="#pills-calc" type="button" role="tab">Kalkulator</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link btn-tab shadow-sm" id="pills-edu-tab" data-bs-toggle="pill" data-bs-target="#education" type="button" role="tab">Mengenal Jejak Karbon</button>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="pills-tabContent">
+        
+    
+        <div class="tab-pane fade" id="education" role="tabpanel">
+            <div class="row justify-content-center">
+                <div class="col-md-10">
+                    <div class="card p-5 text-dark border-0 shadow-lg">
+                        <h2 class="fw-bold text-success mb-4">Apa Itu Jejak Karbon?</h2>
+                        <p>Jejak karbon adalah total emisi gas rumah kaca yang dihasilkan oleh aktivitas manusia. Diukur dalam satuan CO2, jejak ini mencakup penggunaan energi, transportasi, hingga konsumsi makanan kita sehari-hari.</p>
+                        <hr class="my-4">
+                        <h4>Penyebab Utama:</h4>
+                        <ul>
+                            <li>Penggunaan Listrik (Batu Bara/Fosil)</li>
+                            <li>Transportasi Kendaraan Pribadi</li>
+                            <li>Limbah Makanan</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="tab-pane fade" id="education" role="tabpanel">
+    <div class="card p-5 text-dark border-0 shadow-lg">
+        
+        <div class="text-center mt-5 mb-4">
+            <img src="https://smatarunakediri.sch.id/assets/img/logo-smatajaya.png" 
+                 alt="Infografis Jejak Karbon" 
+                 class="img-fluid rounded shadow-lg"
+                 style="max-width: 80%;"> <p class="small text-muted mt-2">Sumber: Infografis Jejak Karbon (2025)</p>
+        </div>
+
+        </div>
+</div>
